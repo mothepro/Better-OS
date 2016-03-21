@@ -12,6 +12,9 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force ; There's no reason to run this script more than once
 
-#End:: SoundSet, +1, , MUTE ; Toggle Mute
-#PgUp:: SoundSet, +1 ; Raise Volume
-#PgDn:: SoundSet, -1 ; Lower Volume
+#F1:: DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0) ; Sleep
+
+#F3:: ; Mail
+Run, Outlook, , max
+; WinActivate, Inbox - Microsoft Outlook
+Return
