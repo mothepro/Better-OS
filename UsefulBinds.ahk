@@ -14,7 +14,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 #F1:: DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0) ; Sleep
 
-#F3:: ; Mail
+#F2:: ; Mail
 Run, Outlook, , max
 ; WinActivate, Inbox - Microsoft Outlook
 Return
