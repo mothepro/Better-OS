@@ -13,5 +13,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force ; There's no reason to run this script more than once
 
 #End:: SoundSet, +1, , MUTE ; Toggle Mute
-#PgUp:: SoundSet, +1 ; Raise Volume
-#PgDn:: SoundSet, -1 ; Lower Volume
+#PgUp::
+	SoundSet, 0, , MUTE ; Unmute
+	SoundSet, +1 ; Raise Volume
+#PgDn::
+	SoundSet, 0, , MUTE ; Unmute
+	SoundSet, -1 ; Lower Volume
