@@ -848,7 +848,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::alreayd::already
 ::alreday::already
 ::aready::already
-::alright::all right
+; ::alright::all right
 ::alsation::Alsatian
 ::alsot::also
 ::aslo::also
