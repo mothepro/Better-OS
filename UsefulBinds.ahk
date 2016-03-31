@@ -12,9 +12,14 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force ; There's no reason to run this script more than once
 
-#F1:: DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0) ; Sleep
+#F1:: ; Sleep
+	DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
 
 #F2:: ; Mail
-Run, Outlook, , max
-; WinActivate, Inbox - Microsoft Outlook
+	Run, Outlook, , max
+	; WinActivate, Inbox - Microsoft Outlook
+
+#F3::
+	Run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", , max
+
 Return
