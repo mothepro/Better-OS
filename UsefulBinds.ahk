@@ -15,9 +15,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ; First Set of Control ;
 ;;;;;;;;;;;;;;;;;;;;;;;;
+
 #F1:: ; Sleep
 	DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
 	Return
+
 #F2:: ; Mail
 	Run, Outlook, , max
 	; WinActivate, Inbox - Microsoft Outlook
@@ -27,9 +29,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", , max
 	Return
 
+#F4::
+	Run, explorer ;"%systemroot%\explorer.exe"
+	Return
+
 ;;;;;;;;;;;;;;;;;;;
 ; Volume Controls ;
 ;;;;;;;;;;;;;;;;;;;
+
 #End:: SoundSet, +1, , MUTE ; Toggle Mute
 
 #PgUp::
