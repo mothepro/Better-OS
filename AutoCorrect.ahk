@@ -1994,6 +1994,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::dominaton::domination
 ::do'nt::don't
 ::dont::don't
+::wont::won't
+::cant::can't
 ::don't no::don't know
 ::doulbe::double
 ::dowloads::downloads
