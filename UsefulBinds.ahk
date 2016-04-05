@@ -33,6 +33,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Run, explorer ;"%systemroot%\explorer.exe"
 	Return
 
+#F5::
+	Run, "C:\Windows\System32\calc.exe"
+	Return
+
+#F6::
+	Run, "C:\Program Files (x86)\Steam\Steam.exe"
+	Return
+
 ;;;;;;;;;;;;;;;;;;;
 ; Volume Controls ;
 ;;;;;;;;;;;;;;;;;;;
