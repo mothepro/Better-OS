@@ -25,19 +25,19 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	; WinActivate, Inbox - Microsoft Outlook
 	Return
 
-#F3::
+#F3:: ; Chrome
 	Run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", , max
 	Return
 
-#F4::
+#F4:: ; Windows Explorer
 	Run, explorer ;"%systemroot%\explorer.exe"
 	Return
 
-#F5::
+#F5:: ; Calculator
 	Run, "C:\Windows\System32\calc.exe"
 	Return
 
-#F6::
+#F6:: ; Steam
 	Run, "C:\Program Files (x86)\Steam\Steam.exe"
 	Return
 

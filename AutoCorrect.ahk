@@ -2614,6 +2614,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::hypocrits::hypocrites
 ::i;d::I'd
 ::i"m::I'm
+::ive::I've
+::Ill::I'll
 ::iconclastic::iconoclastic
 ::idae::idea
 ::idaeidae::idea
@@ -4981,6 +4983,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::wroet::wrote
 ::x-Box::Xbox
 ::xenophoby::xenophobia
+::yall::y'all
 ::yatch::yacht
 ::yaching::yachting
 ::eyar::year
@@ -5325,7 +5328,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::creme::crème
 :*:expose*::exposé
 :*:resume*::résumé
-::ne::né
+; ::ne::né
 ::athleticism::athletic ability
 ::i could care less::I couldn't care less
 ::on accident::on purpose
