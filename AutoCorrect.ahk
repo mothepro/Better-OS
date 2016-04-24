@@ -2614,6 +2614,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::hypocrits::hypocrites
 ::i;d::I'd
 ::i"m::I'm
+::im::I'm
 ::ive::I've
 ::Ill::I'll
 ::iconclastic::iconoclastic
@@ -5010,6 +5011,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::your the::you're the
 ::your their::you're their
 ::your your::you're your
+::youre::you're
 ::youve::you've
 ::yoru::your
 ::yuor::your
