@@ -41,6 +41,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Run, "C:\Program Files (x86)\Steam\Steam.exe"
 	Return
 
+#F7:: ; KeePass
+	Run, "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe"
+	Return
 ;;;;;;;;;;;;;;;;;;;
 ; Volume Controls ;
 ;;;;;;;;;;;;;;;;;;;
