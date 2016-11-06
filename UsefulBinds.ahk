@@ -41,9 +41,18 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Run, "C:\Program Files (x86)\Steam\Steam.exe"
 	Return
 
-#F7:: ; KeePass
+#F7:: ; MightyText
+	Run, "C:\Program Files (x86)\MightyText\MightyText.exe"
+	Return
+	
+#F8:: ; KeePass
 	Run, "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe"
 	Return
+
+#F9:: ; SideSync
+	Run, "C:\Program Files (x86)\Samsung\SideSync4\SideSync.exe"
+	Return
+
 ;;;;;;;;;;;;;;;;;;;
 ; Volume Controls ;
 ;;;;;;;;;;;;;;;;;;;

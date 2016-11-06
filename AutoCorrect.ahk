@@ -1,3 +1,9 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;                                               ;;;
+;;;  CHANGES OCCUR WHEN TYPING PASSWORDS AS WELL  ;;;
+;;;                                               ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;
 ; AutoHotkey Version: 1.x
 ; Language:       English
@@ -5333,6 +5339,6 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; ::ne::né
 ::athleticism::athletic ability
 ::i could care less::I couldn't care less
-::on accident::on purpose
+; ::on accident::on purpose
 ::enoug::enough
 ::worth while::worthwhile
