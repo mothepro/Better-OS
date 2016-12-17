@@ -4882,7 +4882,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::whant::want
 ::wnat::want
 ::wan tit::want it
-::wanna::want to
+; ::wanna::want to
 ::wnated::wanted
 ::whants::wants
 ::wnats::wants
