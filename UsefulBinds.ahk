@@ -38,7 +38,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Return
 
 #F6:: ; Steam
-	Run, "C:\Program Files (x86)\Steam\Steam.exe"
+	Run, "D:\Steam\Steam.exe"
 	Return
 
 #F7:: ; MightyText
@@ -51,6 +51,15 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 #F9:: ; SideSync
 	Run, "C:\Program Files (x86)\Samsung\SideSync4\SideSync.exe"
+	Return
+
+; Must be run as admin
+#Insert:: ; Enable Headphones
+	Run, "C:\Program Files\devcon.exe" enable "HDAUDIO\FUNC_01&VEN_10EC&DEV_0892&SUBSYS_1043841B"
+	Return
+
+#Delete:: ; Disable Headphones
+	Run, "C:\Program Files\devcon.exe" disable "HDAUDIO\FUNC_01&VEN_10EC&DEV_0892&SUBSYS_1043841B"
 	Return
 
 ;;;;;;;;;;;;;;;;;;;
@@ -68,3 +77,17 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	SoundSet, 0, , MUTE ; Unmute
 	SoundSet, -1 ; Lower Volume
 	Return
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Windows Virtual Desktops ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Move to next desktop
+#`::
+	; Doesnt work :(
+	; Send, #{Tab}
+	
+	Send, +{F10}M{Enter}
+	; Send, #^{Right} ; go to next desktop
+	Return
+	
