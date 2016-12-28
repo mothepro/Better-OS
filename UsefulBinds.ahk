@@ -83,3 +83,54 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	; Send, #^{Right} ; go to next desktop
 	Return
 	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; @link https://autohotkey.com/board/topic/44064-copy-on-select-implementation/      ;
+;                                                                                    ;
+; Copy    Drag and Select with the LEFT Mouse Button, and while holding it,          ;
+;         click the RIGHT Mouse Button to copy the selected text/folders/files etc.  ;
+;                                                                                    ;
+; Paste   Right Click where the contents need to be pasted,                          ;
+;         and while holding the RIGHT Mouse Button,                                  ;
+;         LEFT Click to paste the items in the clipboard.                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#IfWinNotActive ahk_class ConsoleWindowClass
+
+bAllowOverride := False
+
+~LButton::
+	GetKeyState, keystate, RButton
+	If (keystate = "D")
+	{
+		SendInput {RButton Up}
+		SendInput {Escape}
+		SendInput +{insert}
+		bAllowOverride := True
+	}
+	Return
+
+RButton::
+	GetKeyState, keystate, LButton
+	If (keystate = "D")
+	{
+		SendInput {LButton Up}
+		SendInput ^{insert}
+		bAllowOverride := True
+		Return
+	}
+	SendInput {RButton Down}
+	Return
+
+RButton Up::
+	GetKeyState, keystate, LButton
+	If (keystate = "D")
+	{
+		Return
+	}
+	If (bAllowOverride)
+	{
+		bAllowOverride := False
+		Return
+	}
+	SendInput {RButton Up}
+	Return
