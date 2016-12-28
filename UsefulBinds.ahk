@@ -66,17 +66,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; Volume Controls ;
 ;;;;;;;;;;;;;;;;;;;
 
-#End:: SoundSet, +1, , MUTE ; Toggle Mute
-
-#PgUp::
-	SoundSet, +1 ; Raise Volume
-	SoundSet, 0, , MUTE ; Unmute
-	Return
-
-#PgDn::
-	SoundSet, 0, , MUTE ; Unmute
-	SoundSet, -1 ; Lower Volume
-	Return
+#End::Send {Volume_Mute}
+#PgUp::Send {Volume_Up}
+#PgDn::Send {Volume_Down}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Windows Virtual Desktops ;
