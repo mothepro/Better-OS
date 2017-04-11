@@ -53,22 +53,32 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Run, "C:\Program Files (x86)\Samsung\SideSync4\SideSync.exe"
 	Return
 
-; Must be run as admin
-#Insert:: ; Enable Headphones
-	Run, "C:\Program Files\devcon.exe" enable "HDAUDIO\FUNC_01&VEN_10EC&DEV_0892&SUBSYS_1043841B"
-	Return
-
-#Delete:: ; Disable Headphones
-	Run, "C:\Program Files\devcon.exe" disable "HDAUDIO\FUNC_01&VEN_10EC&DEV_0892&SUBSYS_1043841B"
-	Return
-
-;;;;;;;;;;;;;;;;;;;
-; Volume Controls ;
-;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;
+; Sound Controls ;
+;;;;;;;;;;;;;;;;;;
 
 #End::Send {Volume_Mute}
 #PgUp::Send {Volume_Up}
 #PgDn::Send {Volume_Down}
+
+; #include lib/vistaaudiocontrol.ahk
+#Insert:: ; Enable Headphones
+	; VA_SetDefaultEndpoint("Speakers", 0)
+	; VA_SetDefaultEndpoint("Speakers", 1)
+	; VA_SetDefaultEndpoint("Speakers", 2)
+	Run, mmsys.cpl
+	WinWait, Sound
+	Send, {Down}{AppsKey}{Down}{Down}{Enter}{Enter}
+	return
+
+#Delete:: ; Disable Headphones
+	; VA_SetDefaultEndpoint("ASUS VN289-C", 0)
+	; VA_SetDefaultEndpoint("ASUS VN289-C", 1)
+	; VA_SetDefaultEndpoint("ASUS VN289-C", 2)
+	Run, mmsys.cpl
+	WinWait, Sound
+	Send, {Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
+	return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Windows Virtual Desktops ;
@@ -82,7 +92,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Send, +{F10}M{Enter}
 	; Send, #^{Right} ; go to next desktop
 	Return
-	
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; @link https://autohotkey.com/board/topic/44064-copy-on-select-implementation/      ;
 ;                                                                                    ;
@@ -94,43 +105,43 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;         LEFT Click to paste the items in the clipboard.                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#IfWinNotActive ahk_class ConsoleWindowClass
+; #IfWinNotActive ahk_class ConsoleWindowClass
 
-bAllowOverride := False
+; bAllowOverride := False
 
-~LButton::
-	GetKeyState, keystate, RButton
-	If (keystate = "D")
-	{
-		SendInput {RButton Up}
-		SendInput {Escape}
-		SendInput +{insert}
-		bAllowOverride := True
-	}
-	Return
+; ~LButton::
+; 	GetKeyState, keystate, RButton
+; 	If (keystate = "D")
+; 	{
+; 		SendInput {RButton Up}
+; 		SendInput {Escape}
+; 		SendInput +{insert}
+; 		bAllowOverride := True
+; 	}
+; 	Return
 
-RButton::
-	GetKeyState, keystate, LButton
-	If (keystate = "D")
-	{
-		SendInput {LButton Up}
-		SendInput ^{insert}
-		bAllowOverride := True
-		Return
-	}
-	SendInput {RButton Down}
-	Return
+; RButton::
+; 	GetKeyState, keystate, LButton
+; 	If (keystate = "D")
+; 	{
+; 		SendInput {LButton Up}
+; 		SendInput ^{insert}
+; 		bAllowOverride := True
+; 		Return
+; 	}
+; 	SendInput {RButton Down}
+; 	Return
 
-RButton Up::
-	GetKeyState, keystate, LButton
-	If (keystate = "D")
-	{
-		Return
-	}
-	If (bAllowOverride)
-	{
-		bAllowOverride := False
-		Return
-	}
-	SendInput {RButton Up}
-	Return
+; RButton Up::
+; 	GetKeyState, keystate, LButton
+; 	If (keystate = "D")
+; 	{
+; 		Return
+; 	}
+; 	If (bAllowOverride)
+; 	{
+; 		bAllowOverride := False
+; 		Return
+; 	}
+; 	SendInput {RButton Up}
+; 	Return
