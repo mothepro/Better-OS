@@ -7,6 +7,6 @@ for /r %%i in (*.ahk) do (
 	echo Compiling %%i to %%~ni.exe
 	Ahk2Exe /in %%i /out %%~ni.exe
 
-	rem echo Running %%~ni.exe
+	echo Running %%~ni.exe
 	rem start /b "%%~ni.exe"
 )

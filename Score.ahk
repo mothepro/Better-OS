@@ -2,54 +2,83 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 #SingleInstance force ; There's no reason to run this script more than once
 
 EnvGet, File, USERPROFILE
-File = %File%\stream_record.txt
+WFile = %File%\stream_record\wins.txt
+LFile = %File%\stream_record\loses.txt
+Files := []
+Files.Push(File . "\stream_record\1.txt")
+Files.Push(File . "\stream_record\2.txt")
+Files.Push(File . "\stream_record\3.txt")
+Files.Push(File . "\stream_record\4.txt")
+Files.Push(File . "\stream_record\5.txt")
+Files.Push(File . "\stream_record\6.txt")
+Files.Push(File . "\stream_record\7.txt")
+Files.Push(File . "\stream_record\8.txt")
+Files.Push(File . "\stream_record\9.txt")
 
-WriteScores(File, 0, 0) ; Clear on load
+; Clear on load
+FileCreateDir, %File%\stream_record
+FileSetAttrib, +H, %File%\stream_record
+
+WriteScores(WFile, 0)
+WriteScores(LFile, 0)
 
 ^NumpadDiv:: ; Reset File
-	WriteScores(File, 0, 0)
+	WriteScores(WFile, 0)
+	WriteScores(LFile, 0)
 	Return
 
 NumpadAdd:: ; Increment Wins
-	Scores := ReadScores(File)
-	WriteScores(File, Scores[1] + 1, Scores[2])
+	WriteScores(WFile, Read(WFile) + 1)
 	Send, {+}
 	Return
 
 ^NumpadAdd:: ; Decrement Wins
-	Scores := ReadScores(File)
-	WriteScores(File, Scores[1] - 1, Scores[2])
+	WriteScores(WFile, Read(WFile) - 1)
 	Send, {+}
 	Return
 
 NumpadSub:: ; Increment Loses
-	Scores := ReadScores(File)
-	WriteScores(File, Scores[1], Scores[2] + 1)
+	WriteScores(LFile, Read(LFile) + 1)
 	Send, -
 	Return
 
 ^NumpadSub:: ; Decrement Loses
-	Scores := ReadScores(File)
-	WriteScores(File, Scores[1], Scores[2] - 1)
+	WriteScores(LFile, Read(LFile) - 1)
 	Send, -
 	Return
+
+^#1:: Input(Files[1], 1)
+^#2:: Input(Files[2], 2)
+^#3:: Input(Files[3], 3)
+^#4:: Input(Files[4], 4)
+^#5:: Input(Files[5], 5)
+^#6:: Input(Files[6], 6)
+^#7:: Input(Files[7], 7)
+^#8:: Input(Files[8], 8)
+^#9:: Input(Files[9], 9)
 
 ;;;;;;;;;;;
 ; Helpers ;
 ;;;;;;;;;;;
 
-ReadScores(file)
+Read(file)
 {
-	FileRead, Output, %file%
-	StringSplit, Array, Output, -, %A_Space%
-	Return [Array1, Array2]
+	FileRead, ret, %file%
+	Return ret
 }
 
-WriteScores(file, wins, loses)
+WriteScores(file, score)
 {
-	wins := wins > 0 ? wins : 0
-	loses := loses > 0 ? loses : 0
+	if score is integer
+		score := score > 0 ? score : 0
 	FileDelete, %file%
-	FileAppend, %wins% - %loses%, %file%
-	FileSetAttrib, +H, %file%
+	FileAppend, %score%, %file%
+}
+
+Input(file, num)
+{
+	FileRead, placeholder, %file%
+	InputBox, ret,, Text #%num%,, 170, 130, 50, 50,,, %placeholder%
+	WriteScores(file, ret)
+	Return ret
 }
