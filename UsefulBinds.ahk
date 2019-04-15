@@ -20,64 +20,60 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
 	Return
 
-#F2:: ; Mail
-	Run, Outlook, , max
-	; WinActivate, Inbox - Microsoft Outlook
+#F2:: ; Calculator
+	Run, "C:\Windows\System32\calc.exe"
 	Return
 
 #F3:: ; Chrome
 	Run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", , max
 	Return
 
-#F4:: ; Windows Explorer
-	Run, explorer ;"%systemroot%\explorer.exe"
+#F5:: ; Discord
+	Run, "C:\Users\test\AppData\Local\Discord\app-0.0.298\Discord.exe"
 	Return
 
-#F5:: ; Calculator
-	Run, "C:\Windows\System32\calc.exe"
+#F6:: ; Battle.Net
+	Run, "C:\Program Files (x86)\Overwatch\Overwatch Launcher.exe"
 	Return
 
-#F6:: ; Steam
+#F7:: ; Steam
 	Run, "D:\Steam\Steam.exe"
 	Return
 
-#F7:: ; MightyText
-	Run, "C:\Program Files (x86)\MightyText\MightyText.exe"
-	Return
-	
 #F8:: ; KeePass
 	Run, "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe"
 	Return
 
-#F9:: ; SideSync
-	Run, "C:\Program Files (x86)\Samsung\SideSync4\SideSync.exe"
+#NumpadDiv:: ; Open Score Program
+	Run, "C:\Program Files\Streamlabs OBS\Streamlabs OBS.exe"
+	Run, "C:\Users\test\Projects\Tools\AutoHotKey\Score.exe"
+
+	Return
+
+^!d:: ; Stay on Top = ctrl + alt + d
+	Winset, Alwaysontop, , A
 	Return
 
 ;;;;;;;;;;;;;;;;;;
 ; Sound Controls ;
 ;;;;;;;;;;;;;;;;;;
 
-#End::Send {Volume_Mute}
-#PgUp::Send {Volume_Up}
-#PgDn::Send {Volume_Down}
+#End:: SoundSet +1, , mute
+#PgUp::SoundSet +1
+#PgDn::SoundSet -1
+#Home::SoundSet 1, Microphone, mute ; Mute Mic
 
-; #include lib/vistaaudiocontrol.ahk
+; DISABLED DEVICES MUST BE VISIBLE IN "Playback Devices".
 #Insert:: ; Enable Headphones
-	; VA_SetDefaultEndpoint("Speakers", 0)
-	; VA_SetDefaultEndpoint("Speakers", 1)
-	; VA_SetDefaultEndpoint("Speakers", 2)
 	Run, mmsys.cpl
 	WinWait, Sound
-	Send, {Down}{AppsKey}{Down}{Down}{Enter}{Enter}
+	SendInput, {Down}{AppsKey}{Down}{Down}{Enter}{Enter}
 	return
 
 #Delete:: ; Disable Headphones
-	; VA_SetDefaultEndpoint("ASUS VN289-C", 0)
-	; VA_SetDefaultEndpoint("ASUS VN289-C", 1)
-	; VA_SetDefaultEndpoint("ASUS VN289-C", 2)
 	Run, mmsys.cpl
 	WinWait, Sound
-	Send, {Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
+	SendInput, {Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
 	return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,10 +83,10 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; Move to next desktop
 #`::
 	; Doesnt work :(
-	; Send, #{Tab}
+	; SendInput, #{Tab}
 	
-	Send, +{F10}M{Enter}
-	; Send, #^{Right} ; go to next desktop
+	SendInput, +{F10}M{Enter}
+	; SendInput, #^{Right} ; go to next desktop
 	Return
 
 
@@ -106,6 +102,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; #IfWinNotActive ahk_class ConsoleWindowClass
+; #IfWinNotActive Overwatch
 
 ; bAllowOverride := False
 
@@ -145,3 +142,25 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; 	}
 ; 	SendInput {RButton Up}
 ; 	Return
+
+; #g::
+; 	Run % "http://www.google.com/search?q=" . GetSelectedText()
+; 	return
+
+; XButton1 & MButton::
+; 	selection := GetSelectedText()
+; 	len := StrLen(selection)
+; 	Click
+; 	Send % selection
+; 	Send, {Shift down}{Left %len%}{Shift up}
+; 	Return
+
+; GetSelectedText() {
+; 	tmp = %ClipboardAll% ; save clipboard
+; 	Clipboard := "" ; clear clipboard
+; 	Send, ^{Insert} ; simulate Ctrl+C (=selection in clipboard)
+; 	ClipWait, 1 ; wait until clipboard contains data
+; 	selection = %Clipboard% ; save the content of the clipboard
+; 	Clipboard = %tmp% ; restore old content of the clipboard
+; 	return (selection = "" ? Clipboard : selection)
+; }
