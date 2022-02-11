@@ -4,6 +4,46 @@
 ;;;                                               ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; just some helpful things for me ;;;
+^!d:: ; Stay on Top = ctrl + alt + d
+    Winset, Alwaysontop, , A
+Return
+
+;#F8:: ; KeePass
+;    Run, "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe"
+;    Return
+
+#F3:: ; Chrome
+    Run, Chrome
+Return
+
+;TODO copy on select (like on linux)
+
+#Insert:: ; Enable Headphones
+    Run, mmsys.cpl
+    WinWait, Sound
+    SendInput, {Down}{Down}{AppsKey}{Down}{Down}{Enter}{Enter}
+return
+
+#Delete:: ; Disable Headphones
+    Run, mmsys.cpl
+    WinWait, Sound
+    SendInput, {Down}{Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
+return
+
+#PgUp:: ; Enable Middle
+    Run, mmsys.cpl
+    WinWait, Sound
+    SendInput, {Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{AppsKey}{Down}{Down}{Enter}{Enter}
+return
+
+#PgDown:: ; Disable Middle
+    Run, mmsys.cpl
+    WinWait, Sound
+    SendInput, {Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
+return
+
+;;;;
 ;
 ; AutoHotkey Version: 1.x
 ; Language:       English
@@ -13,6 +53,7 @@
 ; Script Function:
 ;	Template script (you can customize this template by editing "ShellNew\Template.ahk" in your Windows folder)
 ;
+;;;;
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
@@ -24,7 +65,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; Sep 13 2007: Added more misspellings.
 ;              Added fix for -ign -> -ing that ignores words like "sign".
 ;              Added word beginnings/endings sections to cover more options.
-;              Added auto-accents section for words like fiancée, naïve, etc.
+;              Added auto-accents section for words like fiancÃ©e, naÃ¯ve, etc.
 ; Feb 28 2007: Added other common misspellings based on MS Word AutoCorrect.
 ;              Added optional auto-correction of 2 consecutive capital letters.
 ; Sep 24 2006: Initial release by Jim Biancolo (http://www.biancolo.com)
@@ -78,7 +119,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;------------------------------------------------------------------------------
 #NoEnv ; For security
 #SingleInstance force
-
+    
 ;------------------------------------------------------------------------------
 ; AUto-COrrect TWo COnsecutive CApitals.
 ; Disabled by default to prevent unwanted corrections such as IfEqual->Ifequal.
@@ -92,65 +133,63 @@ keys = abcdefghijklmnopqrstuvwxyz
 Loop Parse, keys
     HotKey ~+%A_LoopField%, Hoty
 Hoty:
-    CapCount := SubStr(A_PriorHotKey,2,1)="+" && A_TimeSincePriorHotkey<999 ? CapCount+1 : 1
-    if CapCount = 2
-        SendInput % "{BS}" . SubStr(A_ThisHotKey,3,1)
-    else if CapCount = 3
-        SendInput % "{Left}{BS}+" . SubStr(A_PriorHotKey,3,1) . "{Right}"
+CapCount := SubStr(A_PriorHotKey,2,1)="+" && A_TimeSincePriorHotkey<999 ? CapCount+1 : 1
+if CapCount = 2
+    SendInput % "{BS}" . SubStr(A_ThisHotKey,3,1)
+else if CapCount = 3
+    SendInput % "{Left}{BS}+" . SubStr(A_PriorHotKey,3,1) . "{Right}"
 Return
 */
 
-
 ;------------------------------------------------------------------------------
-; Win+H to enter misspelling correction.  It will be added to this script.
+; Win+Y to enter misspelling correction.  It will be added to this script.
 ;------------------------------------------------------------------------------
-#h::
-; Get the selected text. The clipboard is used instead of "ControlGet Selected"
-; as it works in more editors and word processors, java apps, etc. Save the
-; current clipboard contents to be restored later.
-AutoTrim Off  ; Retain any leading and trailing whitespace on the clipboard.
-ClipboardOld = %ClipboardAll%
-Clipboard =  ; Must start off blank for detection to work.
-Send ^c
-ClipWait 1
-if ErrorLevel  ; ClipWait timed out.
-    return
-; Replace CRLF and/or LF with `n for use in a "send-raw" hotstring:
-; The same is done for any other characters that might otherwise
-; be a problem in raw mode:
-StringReplace, Hotstring, Clipboard, ``, ````, All  ; Do this replacement first to avoid interfering with the others below.
-StringReplace, Hotstring, Hotstring, `r`n, ``r, All  ; Using `r works better than `n in MS Word, etc.
-StringReplace, Hotstring, Hotstring, `n, ``r, All
-StringReplace, Hotstring, Hotstring, %A_Tab%, ``t, All
-StringReplace, Hotstring, Hotstring, `;, ```;, All
-Clipboard = %ClipboardOld%  ; Restore previous contents of clipboard.
-; This will move the InputBox's caret to a more friendly position:
-SetTimer, MoveCaret, 10
-; Show the InputBox, providing the default hotstring:
-InputBox, Hotstring, New Hotstring, Provide the corrected word on the right side. You can also edit the left side if you wish.`n`nExample entry:`n::teh::the,,,,,,,, ::%Hotstring%::%Hotstring%
-
-if ErrorLevel <> 0  ; The user pressed Cancel.
-    return
-; Otherwise, add the hotstring and reload the script:
-FileAppend, `n%Hotstring%, %A_ScriptFullPath%  ; Put a `n at the beginning in case file lacks a blank line at its end.
-Reload
-Sleep 200 ; If successful, the reload will close this instance during the Sleep, so the line below will never be reached.
-MsgBox, 4,, The hotstring just added appears to be improperly formatted.  Would you like to open the script for editing? Note that the bad hotstring is at the bottom of the script.
-IfMsgBox, Yes, Edit
-return
-
+#y::
+    ; Get the selected text. The clipboard is used instead of "ControlGet Selected"
+    ; as it works in more editors and word processors, java apps, etc. Save the
+    ; current clipboard contents to be restored later.
+    AutoTrim Off  ; Retain any leading and trailing whitespace on the clipboard.
+    ClipboardOld = %ClipboardAll%
+    Clipboard =  ; Must start off blank for detection to work.
+    Send ^c
+    ClipWait 1
+    if ErrorLevel  ; ClipWait timed out.
+        return
+    ; Replace CRLF and/or LF with `n for use in a "send-raw" hotstring:
+    ; The same is done for any other characters that might otherwise
+    ; be a problem in raw mode:
+    StringReplace, Hotstring, Clipboard, ``, ````, All  ; Do this replacement first to avoid interfering with the others below.
+    StringReplace, Hotstring, Hotstring, `r`n, ``r, All  ; Using `r works better than `n in MS Word, etc.
+    StringReplace, Hotstring, Hotstring, `n, ``r, All
+    StringReplace, Hotstring, Hotstring, %A_Tab%, ``t, All
+    StringReplace, Hotstring, Hotstring, `;, ```;, All
+    Clipboard = %ClipboardOld%  ; Restore previous contents of clipboard.
+    ; This will move the InputBox's caret to a more friendly position:
+    SetTimer, MoveCaret, 10
+    ; Show the InputBox, providing the default hotstring:
+    InputBox, Hotstring, New Hotstring, Provide the corrected word on the right side. You can also edit the left side if you wish.`n`nExample entry:`n::teh::the,,,,,,,, ::%Hotstring%::%Hotstring%
+        
+    if ErrorLevel <> 0  ; The user pressed Cancel.
+        return
+    ; Otherwise, add the hotstring and reload the script:
+    FileAppend, `n%Hotstring%, %A_ScriptFullPath%  ; Put a `n at the beginning in case file lacks a blank line at its end.
+    Reload
+    Sleep 200 ; If successful, the reload will close this instance during the Sleep, so the line below will never be reached.
+    MsgBox, 4,, The hotstring just added appears to be improperly formatted.  Would you like to open the script for editing? Note that the bad hotstring is at the bottom of the script.
+    IfMsgBox, Yes, Edit
+        return
+    
 MoveCaret:
-IfWinNotActive, New Hotstring
-    return
-; Otherwise, move the InputBox's insertion point to where the user will type the abbreviation.
-Send {HOME}
-Loop % StrLen(Hotstring) + 4
-    SendInput {Right}
-SetTimer, MoveCaret, Off
+    IfWinNotActive, New Hotstring
+        return
+    ; Otherwise, move the InputBox's insertion point to where the user will type the abbreviation.
+    Send {HOME}
+    Loop % StrLen(Hotstring) + 4
+        SendInput {Right}
+    SetTimer, MoveCaret, Off
 return
 
 #Hotstring R  ; Set the default to be "raw mode" (might not actually be relied upon by anything yet).
-
 
 ;------------------------------------------------------------------------------
 ; Fix for -ign instead of -ing.
@@ -160,7 +199,7 @@ return
 #Hotstring B0  ; Turns off automatic backspacing for the following hotstrings.
 ::align::
 ::antiforeign::
-::arraign::
+    ::arraign::
 ::assign::
 ::benign::
 ::campaign::
@@ -180,7 +219,7 @@ return
 ::ensign::
 ::feign::
 ::foreign::
-::indign::
+    ::indign::
 ::malign::
 ::misalign::
 ::outdesign::
@@ -200,7 +239,6 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 #Hotstring B  ; Turn back on automatic backspacing for all subsequent hotstrings.
 :?:ign::ing
 
-
 ;------------------------------------------------------------------------------
 ; Word endings
 ;------------------------------------------------------------------------------
@@ -219,7 +257,6 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 :?:sice::sive
 :?:t eh:: the
 :?:t hem:: them
-
 
 ;------------------------------------------------------------------------------
 ; Word beginnings
@@ -308,13 +345,11 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 :*:superceed::supersede
 :*:weild::wield
 
-
 ;------------------------------------------------------------------------------
 ; Word middles
 ;------------------------------------------------------------------------------
 :?*:compatab::compatib  ; Covers incompat* and compat*
 :?*:catagor::categor  ; Covers subcatagories and catagories.
-
 
 ;------------------------------------------------------------------------------
 ; Accented English words, from, amongst others,
@@ -323,296 +358,296 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; those that may often not be accented either from a clash with an unaccented 
 ; word (resume), or because the unaccented version is now common (cafe).
 ;------------------------------------------------------------------------------
-::aesop::Æsop
-::a bas::à bas
-::a la::à la
-::ancien regime::Ancien Régime
-::angstrom::Ångström
-::angstroms::Ångströms
-::anime::animé
-::animes::animés
-::ao dai::ào dái
-::apertif::apértif
-::apertifs::apértifs
-::applique::appliqué
-::appliques::appliqués
-::apres::après
-::arete::arête
-::attache::attaché
-::attaches::attachés
-::auto-da-fe::auto-da-fé
-::belle epoque::belle époque
-::bete noire::bête noire
-::betise::bêtise
-::Bjorn::Bjørn
-::blase::blasé
-::boite::boîte
-::boutonniere::boutonnière
-::brulee::brûlée
-::brulees::brûlées
-::canape::canapé
-::canapes::canapés
-::celebre::célèbre
-::celebres::célèbres
-::chaines::chaînés
-::cinema verite::cinéma vérité
-::cinemas verite::cinémas vérité
-::cinema verites::cinéma vérités
-::champs-elysees::Champs-Élysées
-::charge d'affaires::chargé d'affaires
-::chateau::château
-::chateaux::châteaux
-::chateaus::châteaus
-::cliche::cliché
-::cliched::clichéd
-::cliches::clichés
-::cloisonne::cloisonné
-::consomme::consommé
-::consommes::consommés
-::communique::communiqué
-::communiques::communiqués
-::confrere::confrère
-::confreres::confrères
-::cortege::cortège
-::corteges::cortèges
-::coup d'etat::coup d'état
-::coup d'etats::coup d'états
-::coup de tat::coup d'état
-::coup de tats::coup d'états
-::coup de grace::coup de grâce
-::creche::crèche
-::creches::crèches
-::coulee::coulée
-::coulees::coulées
-::creme brulee::crème brûlée 
-::creme brulees::crème brûlées
-::creme caramel::crème caramel
-::creme caramels::crème caramels
-::creme de cacao::crème de cacao
-::creme de menthe::crème de menthe
-::crepe::crêpe
-::crepes::crêpes
-::creusa::Creüsa
-::crouton::croûton
-::croutons::croûtons
-::crudites::crudités
-::curacao::curaçao
-::dais::daïs
-::daises::daïses
-::debacle::débâcle
-::debacles::débâcles
-::debutante::débutante
-::debutants::débutants
-::declasse::déclassé
-::decolletage::décolletage
-::decollete::décolleté
-::decor::décor
-::decors::décors
-::decoupage::découpage
-::degage::dégagé
-::deja vu::déjà vu
-::demode::démodé
-::denoument::dénoument
-::derailleur::dérailleur
-::derriere::derrière
-::deshabille::déshabillé
-::detente::détente
-::diamante::diamanté
-::discotheque::discothèque
-::discotheques::discothèques
-::divorcee::divorcée
-::divorcees::divorcées
-::doppelganger::doppelgänger
-::doppelgangers::doppelgängers
-::eclair::éclair
-::eclairs::éclairs
-::eclat::éclat
-::el nino::El Niño
-::elan::élan
-::emigre::émigré
-::emigres::émigrés
-::entree::entrée
-::entrees::entrées
-::entrepot::entrepôt
-::entrecote::entrecôte
-::epee::épée
-::epees::épées
-::etouffee::étouffée
-::facade::façade
-::facades::façades
-::fete::fête
-::fetes::fêtes
-::faience::faïence
-::fiance::fiancé
-::fiances::fiancés
-::fiancee::fiancée
-::fiancees::fiancées
-::filmjolk::filmjölk
-::fin de siecle::fin de siècle
-::flambe::flambé
-::flambes::flambés
-::fleche::flèche
-::Fohn wind::Föhn wind
-::folie a deux::folie à deux
-::folies a deux::folies à deux
-::fouette::fouetté
-::frappe::frappé
-::frappes::frappés
-:?*:fraulein::fräulein
-:?*:fuhrer::Führer
-::garcon::garçon
-::garcons::garçons
-::gateau::gâteau
-::gateaus::gâteaus
-::gateaux::gâteaux
-::gemutlichkeit::gemütlichkeit
-::glace::glacé
-::glogg::glögg
-::gewurztraminer::Gewürztraminer
-::gotterdammerung::Götterdämmerung
-::grafenberg spot::Gräfenberg spot
-::habitue::habitué
-::ingenue::ingénue
-::jager::jäger
-::jalapeno::jalapeño
-::jalapenos::jalapeños
-::jardiniere::jardinière
-::krouzek::kroužek
-::kummel::kümmel
-::kaldolmar::kåldolmar
-::landler::ländler
-::langue d'oil::langue d'oïl
-::la nina::La Niña
-::litterateur::littérateur
-::lycee::lycée
-::macedoine::macédoine
-::macrame::macramé
-::maitre d'hotel::maître d'hôtel
-::malaguena::malagueña
-::manana::mañana
-::manege::manège
-::manque::manqué
-::materiel::matériel
-::matinee::matinée
-::matinees::matinées
-::melange::mélange
-; ::melee::mêlée
-; ::melees::mêlées
-::menage a trois::ménage à trois
-::menages a trois::ménages à trois
-::mesalliance::mésalliance
-::metier::métier
-::minaudiere::minaudière
-::mobius strip::Möbius strip
-::mobius strips::Möbius strips
-::moire::moiré
-::moireing::moiréing
-::moires::moirés
-::motley crue::Mötley Crüe
-::motorhead::Motörhead
-::naif::naïf
-::naifs::naïfs
-::naive::naïve
-::naiver::naïver
-::naives::naïves
-::naivete::naïveté
-::nee::née
-::negligee::negligée
-::negligees::negligées
-::neufchatel cheese::Neufchâtel cheese
-::nez perce::Nez Percé
-::noël::Noël
-::noëls::Noëls
-::número uno::número uno
-::objet trouve::objet trouvé
-::objets trouve::objets trouvé
-::ombre::ombré
-::ombres::ombrés
-::omerta::omertà
-::opera bouffe::opéra bouffe
-::operas bouffe::opéras bouffe
-::opera comique::opéra comique
-::operas comique::opéras comique
-::outre::outré
-::papier-mache::papier-mâché
-::passe::passé
-::piece de resistance::pièce de résistance
-::pied-a-terre::pied-à-terre
-::plisse::plissé
-::pina colada::Piña Colada
-::pina coladas::Piña Coladas
-::pinata::piñata
-::pinatas::piñatas
-::pinon::piñon
-::pinons::piñons
-::pirana::piraña
-::piranas::pirañas
-::pique::piqué
-::piqued::piquéd
-::più::più
-::plie::plié
-::precis::précis
-::polsa::pölsa
-::pret-a-porter::prêt-à-porter
-::protoge::protégé
-::protege::protégé
-::proteged::protégéd
-::proteges::protégés
-::protegee::protégée
-::protegees::protégées
-::protegeed::protégéed
-::puree::purée
-::pureed::puréed
-::purees::purées
-::Quebecois::Québécois
-::raison d'etre::raison d'être
-::recherche::recherché
-::reclame::réclame
-::résume::résumé
-::resumé::résumé
-::résumes::résumés
-::resumés::résumés
-::retrousse::retroussé
-::risque::risqué
-::riviere::rivière
-::roman a clef::roman à clef
-::roue::roué
-::saute::sauté
-::sauted::sautéd
-::seance::séance
-::seances::séances
-::senor::señor
-::senors::señors
-::senora::señora
-::senoras::señoras
-::senorita::señorita
-::senoritas::señoritas
-::sinn fein::Sinn Féin
-::smorgasbord::smörgåsbord
-::smorgasbords::smörgåsbords
-::smorgastarta::smörgåstårta
-::soigne::soigné
-::soiree::soirée
-::soireed::soiréed
-::soirees::soirées
-::souffle::soufflé
-::souffles::soufflés
-::soupcon::soupçon
-::soupcons::soupçons
-::surstromming::surströmming
-::tete-a-tete::tête-à-tête
-::tete-a-tetes::tête-à-têtes
-::touche::touché
-::tourtiere::tourtière
-::ubermensch::Übermensch
-::ubermensches::Übermensches
-::ventre a terre::ventre à terre
-::vicuna::vicuña
-::vin rose::vin rosé
-::vins rose::vins rosé
-::vis a vis::vis à vis
-::vis-a-vis::vis-à-vis
-::voila::voilà 
+::aesop::Ã†sop
+::a bas::Ã  bas
+::a la::Ã  la
+::ancien regime::Ancien RÃ©gime
+::angstrom::Ã…ngstrÃ¶m
+::angstroms::Ã…ngstrÃ¶ms
+::anime::animÃ©
+::animes::animÃ©s
+::ao dai::Ã o dÃ¡i
+::apertif::apÃ©rtif
+    ::apertifs::apÃ©rtifs
+    ::applique::appliquÃ©
+::appliques::appliquÃ©s
+::apres::aprÃ¨s
+::arete::arÃªte
+::attache::attachÃ©
+::attaches::attachÃ©s
+::auto-da-fe::auto-da-fÃ©
+::belle epoque::belle Ã©poque
+::bete noire::bÃªte noire
+::betise::bÃªtise
+::Bjorn::BjÃ¸rn
+::blase::blasÃ©
+::boite::boÃ®te
+::boutonniere::boutonniÃ¨re
+::brulee::brÃ»lÃ©e
+::brulees::brÃ»lÃ©es
+::canape::canapÃ©
+::canapes::canapÃ©s
+::celebre::cÃ©lÃ¨bre
+::celebres::cÃ©lÃ¨bres
+::chaines::chaÃ®nÃ©s
+::cinema verite::cinÃ©ma vÃ©ritÃ©
+::cinemas verite::cinÃ©mas vÃ©ritÃ©
+::cinema verites::cinÃ©ma vÃ©ritÃ©s
+::champs-elysees::Champs-Ã‰lysÃ©es
+::charge d'affaires::chargÃ© d'affaires
+::chateau::chÃ¢teau
+::chateaux::chÃ¢teaux
+::chateaus::chÃ¢teaus
+::cliche::clichÃ©
+::cliched::clichÃ©d
+::cliches::clichÃ©s
+::cloisonne::cloisonnÃ©
+::consomme::consommÃ©
+::consommes::consommÃ©s
+::communique::communiquÃ©
+::communiques::communiquÃ©s
+::confrere::confrÃ¨re
+::confreres::confrÃ¨res
+::cortege::cortÃ¨ge
+::corteges::cortÃ¨ges
+::coup d'etat::coup d'Ã©tat
+::coup d'etats::coup d'Ã©tats
+::coup de tat::coup d'Ã©tat
+::coup de tats::coup d'Ã©tats
+::coup de grace::coup de grÃ¢ce
+::creche::crÃ¨che
+::creches::crÃ¨ches
+::coulee::coulÃ©e
+::coulees::coulÃ©es
+::creme brulee::crÃ¨me brÃ»lÃ©e 
+::creme brulees::crÃ¨me brÃ»lÃ©es
+::creme caramel::crÃ¨me caramel
+::creme caramels::crÃ¨me caramels
+::creme de cacao::crÃ¨me de cacao
+::creme de menthe::crÃ¨me de menthe
+::crepe::crÃªpe
+::crepes::crÃªpes
+::creusa::CreÃ¼sa
+::crouton::croÃ»ton
+::croutons::croÃ»tons
+::crudites::cruditÃ©s
+::curacao::curaÃ§ao
+::dais::daÃ¯s
+::daises::daÃ¯ses
+::debacle::dÃ©bÃ¢cle
+::debacles::dÃ©bÃ¢cles
+::debutante::dÃ©butante
+::debutants::dÃ©butants
+::declasse::dÃ©classÃ©
+::decolletage::dÃ©colletage
+::decollete::dÃ©colletÃ©
+::decor::dÃ©cor
+::decors::dÃ©cors
+::decoupage::dÃ©coupage
+::degage::dÃ©gagÃ©
+::deja vu::dÃ©jÃ  vu
+::demode::dÃ©modÃ©
+::denoument::dÃ©noument
+::derailleur::dÃ©railleur
+::derriere::derriÃ¨re
+::deshabille::dÃ©shabillÃ©
+::detente::dÃ©tente
+::diamante::diamantÃ©
+::discotheque::discothÃ¨que
+::discotheques::discothÃ¨ques
+::divorcee::divorcÃ©e
+::divorcees::divorcÃ©es
+::doppelganger::doppelgÃ¤nger
+::doppelgangers::doppelgÃ¤ngers
+::eclair::Ã©clair
+::eclairs::Ã©clairs
+::eclat::Ã©clat
+::el nino::El NiÃ±o
+::elan::Ã©lan
+::emigre::Ã©migrÃ©
+::emigres::Ã©migrÃ©s
+::entree::entrÃ©e
+::entrees::entrÃ©es
+::entrepot::entrepÃ´t
+::entrecote::entrecÃ´te
+::epee::Ã©pÃ©e
+::epees::Ã©pÃ©es
+::etouffee::Ã©touffÃ©e
+::facade::faÃ§ade
+::facades::faÃ§ades
+::fete::fÃªte
+::fetes::fÃªtes
+::faience::faÃ¯ence
+::fiance::fiancÃ©
+::fiances::fiancÃ©s
+::fiancee::fiancÃ©e
+::fiancees::fiancÃ©es
+::filmjolk::filmjÃ¶lk
+::fin de siecle::fin de siÃ¨cle
+::flambe::flambÃ©
+::flambes::flambÃ©s
+::fleche::flÃ¨che
+::Fohn wind::FÃ¶hn wind
+::folie a deux::folie Ã  deux
+::folies a deux::folies Ã  deux
+::fouette::fouettÃ©
+::frappe::frappÃ©
+::frappes::frappÃ©s
+:?*:fraulein::frÃ¤ulein
+:?*:fuhrer::FÃ¼hrer
+::garcon::garÃ§on
+::garcons::garÃ§ons
+::gateau::gÃ¢teau
+::gateaus::gÃ¢teaus
+::gateaux::gÃ¢teaux
+::gemutlichkeit::gemÃ¼tlichkeit
+::glace::glacÃ©
+::glogg::glÃ¶gg
+::gewurztraminer::GewÃ¼rztraminer
+::gotterdammerung::GÃ¶tterdÃ¤mmerung
+::grafenberg spot::GrÃ¤fenberg spot
+::habitue::habituÃ©
+::ingenue::ingÃ©nue
+::jager::jÃ¤ger
+::jalapeno::jalapeÃ±o
+::jalapenos::jalapeÃ±os
+::jardiniere::jardiniÃ¨re
+::krouzek::krouÅ¾ek
+::kummel::kÃ¼mmel
+::kaldolmar::kÃ¥ldolmar
+::landler::lÃ¤ndler
+::langue d'oil::langue d'oÃ¯l
+::la nina::La NiÃ±a
+::litterateur::littÃ©rateur
+::lycee::lycÃ©e
+::macedoine::macÃ©doine
+::macrame::macramÃ©
+::maitre d'hotel::maÃ®tre d'hÃ´tel
+::malaguena::malagueÃ±a
+::manana::maÃ±ana
+::manege::manÃ¨ge
+::manque::manquÃ©
+::materiel::matÃ©riel
+::matinee::matinÃ©e
+::matinees::matinÃ©es
+::melange::mÃ©lange
+; ::melee::mÃªlÃ©e
+; ::melees::mÃªlÃ©es
+::menage a trois::mÃ©nage Ã  trois
+::menages a trois::mÃ©nages Ã  trois
+::mesalliance::mÃ©salliance
+::metier::mÃ©tier
+::minaudiere::minaudiÃ¨re
+::mobius strip::MÃ¶bius strip
+::mobius strips::MÃ¶bius strips
+::moire::moirÃ©
+::moireing::moirÃ©ing
+::moires::moirÃ©s
+::motley crue::MÃ¶tley CrÃ¼e
+::motorhead::MotÃ¶rhead
+::naif::naÃ¯f
+    ::naifs::naÃ¯fs
+    ::naive::naÃ¯ve
+::naiver::naÃ¯ver
+::naives::naÃ¯ves
+::naivete::naÃ¯vetÃ©
+::nee::nÃ©e
+::negligee::negligÃ©e
+::negligees::negligÃ©es
+::neufchatel cheese::NeufchÃ¢tel cheese
+::nez perce::Nez PercÃ©
+::noÃ«l::NoÃ«l
+::noÃ«ls::NoÃ«ls
+::nÃºmero uno::nÃºmero uno
+::objet trouve::objet trouvÃ©
+::objets trouve::objets trouvÃ©
+::ombre::ombrÃ©
+::ombres::ombrÃ©s
+::omerta::omertÃ 
+::opera bouffe::opÃ©ra bouffe
+::operas bouffe::opÃ©ras bouffe
+::opera comique::opÃ©ra comique
+::operas comique::opÃ©ras comique
+::outre::outrÃ©
+::papier-mache::papier-mÃ¢chÃ©
+::passe::passÃ©
+::piece de resistance::piÃ¨ce de rÃ©sistance
+::pied-a-terre::pied-Ã -terre
+::plisse::plissÃ©
+::pina colada::PiÃ±a Colada
+::pina coladas::PiÃ±a Coladas
+::pinata::piÃ±ata
+::pinatas::piÃ±atas
+::pinon::piÃ±on
+::pinons::piÃ±ons
+::pirana::piraÃ±a
+::piranas::piraÃ±as
+::pique::piquÃ©
+::piqued::piquÃ©d
+::piÃ¹::piÃ¹
+::plie::pliÃ©
+::precis::prÃ©cis
+::polsa::pÃ¶lsa
+::pret-a-porter::prÃªt-Ã -porter
+::protoge::protÃ©gÃ©
+::protege::protÃ©gÃ©
+::proteged::protÃ©gÃ©d
+::proteges::protÃ©gÃ©s
+::protegee::protÃ©gÃ©e
+::protegees::protÃ©gÃ©es
+::protegeed::protÃ©gÃ©ed
+::puree::purÃ©e
+::pureed::purÃ©ed
+::purees::purÃ©es
+::Quebecois::QuÃ©bÃ©cois
+::raison d'etre::raison d'Ãªtre
+::recherche::recherchÃ©
+::reclame::rÃ©clame
+::rÃ©sume::rÃ©sumÃ©
+::resumÃ©::rÃ©sumÃ©
+::rÃ©sumes::rÃ©sumÃ©s
+::resumÃ©s::rÃ©sumÃ©s
+::retrousse::retroussÃ©
+::risque::risquÃ©
+::riviere::riviÃ¨re
+::roman a clef::roman Ã  clef
+::roue::rouÃ©
+::saute::sautÃ©
+::sauted::sautÃ©d
+::seance::sÃ©ance
+::seances::sÃ©ances
+::senor::seÃ±or
+::senors::seÃ±ors
+::senora::seÃ±ora
+::senoras::seÃ±oras
+::senorita::seÃ±orita
+::senoritas::seÃ±oritas
+::sinn fein::Sinn FÃ©in
+::smorgasbord::smÃ¶rgÃ¥sbord
+::smorgasbords::smÃ¶rgÃ¥sbords
+::smorgastarta::smÃ¶rgÃ¥stÃ¥rta
+::soigne::soignÃ©
+::soiree::soirÃ©e
+::soireed::soirÃ©ed
+::soirees::soirÃ©es
+::souffle::soufflÃ©
+::souffles::soufflÃ©s
+::soupcon::soupÃ§on
+::soupcons::soupÃ§ons
+::surstromming::surstrÃ¶mming
+::tete-a-tete::tÃªte-Ã -tÃªte
+::tete-a-tetes::tÃªte-Ã -tÃªtes
+::touche::touchÃ©
+::tourtiere::tourtiÃ¨re
+::ubermensch::Ãœbermensch
+::ubermensches::Ãœbermensches
+::ventre a terre::ventre Ã  terre
+::vicuna::vicuÃ±a
+::vin rose::vin rosÃ©
+::vins rose::vins rosÃ©
+::vis a vis::vis Ã  vis
+::vis-a-vis::vis-Ã -vis
+::voila::voilÃ  
 
 ;------------------------------------------------------------------------------
 ; Common Misspellings - the main list
@@ -628,7 +663,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::aberation::aberration
 ::aborigene::aborigine
 ::abortificant::abortifacient
-::abbout::about
+    ::abbout::about
 ::abotu::about
 ::baout::about
 ::abouta::about a
@@ -770,7 +805,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::afficianados::aficionados
 ::afficionados::aficionados
 ::aforememtioned::aforementioned
-::affraid::afraid
+    ::affraid::afraid
 ::afterthe::after the
 ::agian::again
 ::agin::again
@@ -1001,8 +1036,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::artice::article
 ::articel::article
 ::artifical::artificial
-::artifically::artificially
-::artillary::artillery
+    ::artifically::artificially
+    ::artillary::artillery
 ::asthe::as the
 ::aswell::as well
 ::asetic::ascetic
@@ -1115,9 +1150,9 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::eb::be
 ::beachead::beachhead
 ::beatiful::beautiful
-::beautyfull::beautiful
-::beutiful::beautiful
-::becamae::became
+    ::beautyfull::beautiful
+    ::beutiful::beautiful
+    ::becamae::became
 ::baceause::because
 ::beacuse::because
 ::becasue::because
@@ -1134,8 +1169,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::becomeing::becoming
 ::becomming::becoming
 ::bedore::before
-::befoer::before
-::begginer::beginner
+    ::befoer::before
+    ::begginer::beginner
 ::begginers::beginners
 ::beggining::beginning
 ::begining::beginning
@@ -1148,7 +1183,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::beleagured::beleaguered
 ::beligum::belgium
 ::beleif::belief
-::beleiev::believe
+    ::beleiev::believe
 ::beleieve::believe
 ::beleive::believe
 ::belive::believe
@@ -1161,10 +1196,10 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::bemusemnt::bemusement
 ::benefical::beneficial
 ::benificial::beneficial
-::beneficary::beneficiary
+    ::beneficary::beneficiary
 ::benifit::benefit
-::benifits::benefits
-::bergamont::bergamot
+    ::benifits::benefits
+    ::bergamont::bergamot
 ::bernouilli::Bernoulli
 ::beseige::besiege
 ::beseiged::besieged
@@ -1197,8 +1232,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::brethen::brethren
 ::bretheren::brethren
 ::breif::brief
-::breifly::briefly
-::briliant::brilliant
+    ::breifly::briefly
+    ::briliant::brilliant
 ::brillant::brilliant
 ::brimestone::brimstone
 ::britian::Britain
@@ -1237,8 +1272,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::calander::calendar
 ::calenders::calendars
 ::califronia::California
-::califronian::Californian
-::caligraphy::calligraphy
+    ::califronian::Californian
+    ::caligraphy::calligraphy
 ::callipigian::callipygian
 ::cambrige::Cambridge
 ::camoflage::camouflage
@@ -1351,7 +1386,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::chemicaly::chemically
 ::chemestry::chemistry
 ::cheif::chief
-::childbird::childbirth
+    ::childbird::childbirth
 ::childen::children
 ::childrens::children's
 ::chilli::chili
@@ -1410,7 +1445,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::comback::comeback
 ::commedic::comedic
 ::confortable::comfortable
-::comming::coming
+    ::comming::coming
 ::commadn::command
 ::comander::commander
 ::comando::commando
@@ -1528,7 +1563,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::configureable::configurable
 ::confirmmation::confirmation
 ::coform::conform
-::congradulations::congratulations
+    ::congradulations::congratulations
 ::congresional::congressional
 ::conjecutre::conjecture
 ::conjuction::conjunction
@@ -1693,7 +1728,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::criticists::critics
 ::crockodiles::crocodiles
 ::crucifiction::crucifixion
-::crusies::cruises
+    ::crusies::cruises
 ::crystalisation::crystallisation
 ::culiminating::culminating
 ::cumulatative::cumulative
@@ -1856,23 +1891,23 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::didint::didn't
 ::didnt::didn't
 ::differance::difference
-::diferences::differences
-::differances::differences
-::difefrent::different
-::diferent::different
-::diferrent::different
-::differant::different
-::differemt::different
-::differnt::different
-::diffrent::different
-::differentiatiations::differentiations
-::diffcult::difficult
-::diffculties::difficulties
-::dificulties::difficulties
-::diffculty::difficulty
-::difficulity::difficulty
-::dificulty::difficulty
-::dilemna::dilemma
+    ::diferences::differences
+    ::differances::differences
+    ::difefrent::different
+    ::diferent::different
+    ::diferrent::different
+    ::differant::different
+    ::differemt::different
+    ::differnt::different
+    ::diffrent::different
+    ::differentiatiations::differentiations
+    ::diffcult::difficult
+    ::diffculties::difficulties
+    ::dificulties::difficulties
+    ::diffculty::difficulty
+    ::difficulity::difficulty
+    ::dificulty::difficulty
+    ::dilemna::dilemma
 ::delapidated::dilapidated
 ::dimention::dimension
 ::dimentional::dimensional
@@ -1913,7 +1948,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::diciplin::discipline
 ::disiplined::disciplined
 ::unconfortability::discomfort
-::diconnects::disconnects
+    ::diconnects::disconnects
 ::discontentment::discontent
 ::dicover::discover
 ::disover::discover
@@ -2043,8 +2078,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::efficently::efficiently
 ::effulence::effluence
 ::efort::effort
-::eforts::efforts
-::aggregious::egregious
+    ::eforts::efforts
+    ::aggregious::egregious
 ::eight o::eight o
 ::eigth::eighth
 ::eiter::either
@@ -2061,8 +2096,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::eleminated::eliminated
 ::eleminating::eliminating
 ::alse::else
-::esle::else
-::eminate::emanate
+    ::esle::else
+    ::eminate::emanate
 ::eminated::emanated
 ::embargos::embargoes
 ::embarras::embarrass
@@ -2100,7 +2135,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::endig::ending
 ::endolithes::endoliths
 ::enforceing::enforcing
-::engagment::engagement
+    ::engagment::engagement
 ::engeneer::engineer
 ::engieneer::engineer
 ::engeneering::engineering
@@ -2335,35 +2370,35 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::follwoing::following
 ::folowing::following
 ::formalhaut::Fomalhaut
-::foootball::football
+    ::foootball::football
 ::fora::for a
-::forthe::for the
-::forbad::forbade
-::forbiden::forbidden
-::forhead::forehead
-::foriegn::foreign
-::formost::foremost
-::forunner::forerunner
-::forsaw::foresaw
-::forseeable::foreseeable
-::fortelling::foretelling
-::foreward::foreword
-::forfiet::forfeit
-::formallise::formalise
-::formallised::formalised
-::formallize::formalize
-::formallized::formalized
-::formaly::formally
-::fomed::formed
-::fromed::formed
-::formelly::formerly
-::fourties::forties
-::fourty::forty
-::forwrd::forward
-::foward::forward
-::forwrds::forwards
-::fowards::forwards
-::faught::fought
+    ::forthe::for the
+    ::forbad::forbade
+    ::forbiden::forbidden
+    ::forhead::forehead
+    ::foriegn::foreign
+    ::formost::foremost
+    ::forunner::forerunner
+    ::forsaw::foresaw
+    ::forseeable::foreseeable
+    ::fortelling::foretelling
+    ::foreward::foreword
+    ::forfiet::forfeit
+    ::formallise::formalise
+    ::formallised::formalised
+    ::formallize::formalize
+    ::formallized::formalized
+    ::formaly::formally
+    ::fomed::formed
+    ::fromed::formed
+    ::formelly::formerly
+    ::fourties::forties
+    ::fourty::forty
+    ::forwrd::forward
+    ::foward::forward
+    ::forwrds::forwards
+    ::fowards::forwards
+    ::faught::fought
 ::fougth::fought
 ::foudn::found
 ::foundaries::foundries
@@ -2461,7 +2496,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::grat::great
 ::gridles::griddles
 ::greif::grief
-::gropu::group
+    ::gropu::group
 ::gruop::group
 ::gruops::groups
 ::grwo::grow
@@ -2596,9 +2631,9 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::honourarium::honorarium
 ::honory::honorary
 ::honourific::honorific
-::hounour::honour
+    ::hounour::honour
 ::horrifing::horrifying
-::hospitible::hospitable
+    ::hospitible::hospitable
 ::housr::hours
 ::howver::however
 ::huminoid::humanoid
@@ -2629,8 +2664,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::idaes::ideas
 ::identicial::identical
 ::identifers::identifiers
-::identofy::identify
-::idealogies::ideologies
+    ::identofy::identify
+    ::idealogies::ideologies
 ::idealogy::ideology
 ::idiosyncracy::idiosyncrasy
 ::ideosyncratic::idiosyncratic
@@ -2760,9 +2795,9 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::influented::influenced
 ::influencial::influential
 ::infomation::information
-::informatoin::information
-::informtion::information
-::infrigement::infringement
+    ::informatoin::information
+    ::informtion::information
+    ::infrigement::infringement
 ::ingenius::ingenious
 ::ingreediants::ingredients
 ::inhabitans::inhabitants
@@ -2888,8 +2923,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::kindergarden::kindergarten
 ::klenex::kleenex
 ::knive::knife
-::knifes::knives
-::konw::know
+    ::knifes::knives
+    ::konw::know
 ::kwno::know
 ::nkow::know
 ::nkwo::know
@@ -2952,7 +2987,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::leutenant::lieutenant
 ::lieutenent::lieutenant
 ::liftime::lifetime
-::lightyear::light year
+    ::lightyear::light year
 ::lightyears::light years
 ::lightening::lightning
 ::liek::like
@@ -2967,7 +3002,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::linnaena::linnaean
 ::lippizaner::lipizzaner
 ::liquify::liquefy
-::listners::listeners
+    ::listners::listeners
 ::litterally::literally
 ::litature::literature
 ::literture::literature
@@ -2993,7 +3028,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::magasine::magazine
 ::magincian::magician
 ::magnificient::magnificent
-::magolia::magnolia
+    ::magolia::magnolia
 ::mailny::mainly
 ::mantain::maintain
 ::mantained::maintained
@@ -3022,8 +3057,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::manuver::maneuver
 ::manoeuverability::maneuverability
 ::manifestion::manifestation
-::manisfestations::manifestations
-::manufature::manufacture
+    ::manisfestations::manifestations
+    ::manufature::manufacture
 ::manufacturedd::manufactured
 ::manufatured::manufactured
 ::manufaturing::manufacturing
@@ -3091,7 +3126,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::michagan::Michigan
 ::micoscopy::microscopy
 ::midwifes::midwives
-::might of::might have
+    ::might of::might have
 ::mileau::milieu
 ::mileu::milieu
 ::melieux::milieux
@@ -3128,7 +3163,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::misdameanors::misdemeanors
 ::misdemenors::misdemeanors
 ::misfourtunes::misfortunes
-::mysogynist::misogynist
+    ::mysogynist::misogynist
 ::mysogyny::misogyny
 ::misile::missile
 ::missle::missile
@@ -3316,7 +3351,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::octohedral::octahedral
 ::octohedron::octahedron
 ::odouriferous::odoriferous
-::odourous::odorous
+    ::odourous::odorous
 ::ouevre::oeuvre
 ::fo::of
 :C:fo::of
@@ -3489,9 +3524,9 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::precentage::percentage
 ::perenially::perennially
 ::performence::performance
-::perfomers::performers
-::performes::performs
-::perhasp::perhaps
+    ::perfomers::performers
+    ::performes::performs
+    ::perhasp::perhaps
 ::perheaps::perhaps
 ::perhpas::perhaps
 ::perphas::perhaps
@@ -3563,7 +3598,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::palce::place
 ::plagarism::plagiarism
 ::plantiff::plaintiff
-::planed::planned
+    ::planed::planned
 ::planation::plantation
 ::plateu::plateau
 ::plausable::plausible
@@ -3748,8 +3783,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::prohabition::prohibition
 ::prologomena::prolegomena
 ::preliferation::proliferation
-::profilic::prolific
-::prominance::prominence
+    ::profilic::prolific
+    ::prominance::prominence
 ::prominant::prominent
 ::prominantly::prominently
 ::promiscous::promiscuous
@@ -3836,10 +3871,10 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::rancourous::rancorous
 ::repid::rapid
 ::rarified::rarefied
-::rasberry::raspberry
+    ::rasberry::raspberry
 ::ratehr::rather
 ::radify::ratify
-::racaus::raucous
+    ::racaus::raucous
 ::reched::reached
 ::reacing::reaching
 ::readmition::readmission
@@ -3913,7 +3948,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::refrers::refers
 ::refect::reflect
 ::refromist::reformist
-::refridgeration::refrigeration
+    ::refridgeration::refrigeration
 ::refridgerator::refrigerator
 ::refusla::refusal
 ::irregardless::regardless
@@ -3927,7 +3962,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::reigining::reigning
 ::reicarnation::reincarnation
 ::reenforced::reinforced
-::realtions::relations
+    ::realtions::relations
 ::relatiopnship::relationship
 ::realitvely::relatively
 ::relativly::relatively
@@ -4065,8 +4100,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::russina::Russian
 ::russion::Russian
 ::sacrafice::sacrifice
-::sacrifical::sacrificial
-::sacreligious::sacrilegious
+    ::sacrifical::sacrificial
+    ::sacreligious::sacrilegious
 ::sandess::sadness
 ::saftey::safety
 ::safty::safety
@@ -4110,8 +4145,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::scince::science
 ::scinece::science
 ::scientfic::scientific
-::scientifc::scientific
-::screenwrighter::screenwriter
+    ::scientifc::scientific
+    ::screenwrighter::screenwriter
 ::scirpt::script
 ::scoll::scroll
 ::scrutinity::scrutiny
@@ -4150,13 +4185,13 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::seh::she
 ::shesaid::she said
 ::sherif::sheriff
-::sheild::shield
+    ::sheild::shield
 ::shineing::shining
 ::shiped::shipped
 ::shiping::shipping
 ::shopkeeepers::shopkeepers
 ::shortwhile::short while
-::shorly::shortly
+    ::shorly::shortly
 ::shoudl::should
 ::should of::should have
 ::shoudln't::shouldn't
@@ -4172,15 +4207,15 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::signitories::signatories
 ::signitory::signatory
 ::siginificant::significant
-::signficant::significant
-::signficiant::significant
-::signifacnt::significant
-::signifigant::significant
-::signifantly::significantly
-::significently::significantly
-::signifigantly::significantly
-::signfies::signifies
-::silicone chip::silicon chip
+    ::signficant::significant
+    ::signficiant::significant
+    ::signifacnt::significant
+    ::signifigant::significant
+    ::signifantly::significantly
+    ::significently::significantly
+    ::signifigantly::significantly
+    ::signfies::signifies
+    ::silicone chip::silicon chip
 ::simalar::similar
 ::similiar::similar
 ::simmilar::similar
@@ -4249,10 +4284,10 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::speciallized::specialised
 ::speices::species
 ::specfic::specific
-::specificaly::specifically
-::specificalyl::specifically
-::specifiying::specifying
-::speciman::specimen
+    ::specificaly::specifically
+    ::specificalyl::specifically
+    ::specifiying::specifying
+    ::speciman::specimen
 ::spectauclar::spectacular
 ::spectaulars::spectaculars
 ::spectum::spectrum
@@ -4587,7 +4622,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::they;v::they've
 ::theyve::they've
 ::theif::thief
-::theives::thieves
+    ::theives::thieves
 ::hting::thing
 ::thign::thing
 ::thnig::thing
@@ -4668,9 +4703,9 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::transfered::transferred
 ::transfering::transferring
 ::tranform::transform
-::transformaton::transformation
-::tranformed::transformed
-::transistion::transition
+    ::transformaton::transformation
+    ::tranformed::transformed
+    ::transistion::transition
 ::translater::translator
 ::translaters::translators
 ::transmissable::transmissible
@@ -4729,12 +4764,12 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::undetecable::undetectable
 ::undoubtely::undoubtedly
 ::unforgetable::unforgettable
-::unforgiveable::unforgivable
-::unforetunately::unfortunately
-::unfortunatley::unfortunately
-::unfortunatly::unfortunately
-::unfourtunately::unfortunately
-::unahppy::unhappy
+    ::unforgiveable::unforgivable
+    ::unforetunately::unfortunately
+    ::unfortunatley::unfortunately
+    ::unfortunatly::unfortunately
+    ::unfourtunately::unfortunately
+    ::unahppy::unhappy
 ::unilatreal::unilateral
 ::unilateraly::unilaterally
 ::unilatreally::unilaterally
@@ -4838,7 +4873,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::vengence::vengeance
 ::venemous::venomous
 ::verfication::verification
-::vermillion::vermilion
+    ::vermillion::vermilion
 ::versitilaty::versatility
 ::versitlity::versatility
 ::verison::version
@@ -4854,8 +4889,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::vigilence::vigilance
 ::vigourous::vigorous
 ::villification::vilification
-::villify::vilify
-::villian::villain
+    ::villify::vilify
+    ::villian::villain
 ::violentce::violence
 ::virgina::Virginia
 ::virutal::virtual
@@ -4930,7 +4965,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::wihch::which
 ::whicht he::which the
 ::hwile::while
-::woh::who
+    ::woh::who
 ::who;s::who's
 ::hwole::whole
 ::wohle::whole
@@ -4938,7 +4973,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::widesread::widespread
 ::weilded::wielded
 ::wief::wife
-::iwll::will
+    ::iwll::will
 ::wille::will
 ::wiull::will
 ::willbe::will be
@@ -5027,18 +5062,19 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::zeebra::zebra
 ::sionist::Zionist
 ::sionists::Zionists
+::memer::mÃ©mÃ©r
 
 ;------------------------------------------------------------------------------
 ; Ambiguous entries.  Where desired, pick the one that's best for you, edit,
 ; and move into the above list or, preferably, the autocorrect user file.
 ;------------------------------------------------------------------------------
 /*
-:*:cooperat::coöperat
-::(c)::©
-::(r)::®
-::(tm)::™
-::a gogo::à gogo
-::abbe::abbé
+:*:cooperat::coÃ¶perat
+::(c)::Â©
+::(r)::Â®
+::(tm)::â„¢
+::a gogo::Ã  gogo
+::abbe::abbÃ©
 ::accension::accession, ascension
 ::achive::achieve, archive
 ::achived::achieved, archived
@@ -5048,14 +5084,14 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::adressing::addressing, dressing
 ::afair::affair, afar, Afar (African place), a fair, acronym "as far as I recall"
 ::affort::afford, effort
-::agin::again, a gin, aging
+    ::agin::again, a gin, aging
 ::agina::again, angina
-::ago-go::àgo-go
+::ago-go::Ã go-go
 ::aledge::allege, a ledge
 ::alot::a lot, allot
 ::alusion::allusion, illusion
 ::amature::armature, amateur
-::anu::añu
+::anu::aÃ±u
 ::anual::annual, anal
 ::anual::annual, manual
 ::aparent::apparent, a parent
@@ -5073,19 +5109,19 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::behavour::behavior, behaviour
 ::belives::believes, beliefs
 ::boaut::bout, boat, about
-::Bon::Bön
+::Bon::BÃ¶n
 
 ::assasined::assassinated Broken by ":*:assasin::", but no great loss.
-::Bootes::Boötes
-::bric-a-brac::bric-à-brac
+::Bootes::BoÃ¶tes
+::bric-a-brac::bric-Ã -brac
 ::buring::burying, burning, burin, during
 ::busineses::business, businesses
-::cafe::café
+::cafe::cafÃ©
 ::calaber::caliber, calibre
 ::calander::calendar, calender, colander
 ::cancelled::canceled  ; commonwealth vs US
 ::cancelling::canceling  ; commonwealth vs US
-::canon::cañon
+::canon::caÃ±on
 ::cant::cannot, can not, can't
 ::carcas::carcass, Caracas
 ::carmel::caramel, carmel-by-the-sea
@@ -5097,9 +5133,9 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::clera::clear, sclera
 ::comander::commander, commandeer
 ::competion::competition, completion
-::continuum::continuüm
-::coopt::coöpt
-::coordinat::coördinat
+::continuum::continuÃ¼m
+::coopt::coÃ¶pt
+::coordinat::coÃ¶rdinat
 ::coorperation::cooperation, corporation
 ::coudl::could, cloud
 ::councellor::councillor, counselor, councilor
@@ -5107,23 +5143,23 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::coururier::courier, couturier
 ::coverted::converted, covered, coveted
 ::cpoy::coy, copy
-::creme::crème
+::creme::crÃ¨me
 ::dael::deal, dial, dahl
 ::deram::dram, dream
 ::desparate::desperate, disparate
 ::diea::idea, die
 ::dieing::dying, dyeing
 ::diversed::diverse, diverged
-::divorce::divorcé
-::Dona::Doña
+::divorce::divorcÃ©
+::Dona::DoÃ±a
 ::doub::doubt, daub
 ::dyas::dryas, Dyas (Robert Dyas is a hardware chain), dais
 ::efford::effort, afford
-::effords::efforts, affords
-::eigth::eighth, eight
+    ::effords::efforts, affords
+    ::eigth::eighth, eight
 ::electic::eclectic, electric
 ::electon::election, electron
-::elite::élite
+::elite::Ã©lite
 ::emition::emission, emotion
 ::emminent::eminent, imminent
 ::empirial::empirical, imperial
@@ -5131,8 +5167,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::erally::orally, really
 ::erested::arrested, erected
 ::ethose::those, ethos
-::etude::étude
-::expose::exposé
+::etude::Ã©tude
+::expose::exposÃ©
 ::extint::extinct, extant
 ::eyar::year, eyas
 ::eyars::years, eyas
@@ -5142,10 +5178,10 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::firts::flirts, first
 ::fleed::fled, freed
 ::fo::for, of
-::fomr::from, form
-::fontrier::fontier, frontier
+    ::fomr::from, form
+    ::fontrier::fontier, frontier
 ::fro::for, to and fro, (a)fro
-::futhroc::futhark, futhorc
+    ::futhroc::futhark, futhorc
 ::gae::game, Gael, gale
 ::gaurd::guard, gourd
 ::gogin::going, Gauguin
@@ -5176,7 +5212,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::israelies::Israelis, Israelites
 ::labatory::lavatory, laboratory
 ::labled::labelled, labeled
-::lame::lamé
+::lame::lamÃ©
 ::leanr::lean, learn, leaner
 ::lible::libel, liable
 ::liscense::license, licence
@@ -5195,35 +5231,35 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::manuevers::maneuvers, manoeuvres
 ::mear::wear, mere, mare
 ::meranda::veranda, Miranda
-::Metis::Métis
+::Metis::MÃ©tis
 ::mit::mitt, M.I.T., German "with"
 ::monestary::monastery, monetary
 ::moreso::more, more so
 ::muscels::mussels, muscles
-::ne::né
+::ne::nÃ©
 ::neice::niece, nice
 ::neigbour::neighbour, neighbor
 ::neigbouring::neighbouring, neighboring
 ::neigbours::neighbours, neighbors
 ::nto:: not ; Replaced with case sensitive for NTO acronym.
 ::oging::going, ogling
-::ole::olé
+::ole::olÃ©
 ::onot::note, not
-::opium::opïum
-::ore::öre
-::ore::øre
+::opium::opÃ¯um
+::ore::Ã¶re
+::ore::Ã¸re
 ::orgin::origin, organ
 ::palce::place, palace
-::pate::pâte
-::pate::pâté
+::pate::pÃ¢te
+::pate::pÃ¢tÃ©
 ::performes::performed, performs
-::personel::personnel, personal
+    ::personel::personnel, personal
 ::positon::position, positron
-::preëmpt
-::premiere::première
-::premiered::premièred
-::premieres::premières
-::premiering::premièring
+::preÃ«mpt
+::premiere::premiÃ¨re
+::premiered::premiÃ¨red
+::premieres::premiÃ¨res
+::premiering::premiÃ¨ring
 ::procede::proceed, precede
 ::proceded::proceeded, preceded
 ::procedes::proceeds, precedes
@@ -5234,15 +5270,15 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::prominately::prominently, predominately
 ::qtuie::quite, quiet
 ::qutie::quite, quiet
-::reenter::reënter
+::reenter::reÃ«nter
 ::relized::realised, realized
 ::repatition::repetition, repartition
-::residuum::residuüm
+::residuum::residuÃ¼m
 ::restraunt::restraint, restaurant
-::resume::résumé
+::resume::rÃ©sumÃ©
 ::rigeur::rigueur, rigour, rigor
-::role::rôle
-::rose::rosé
+::role::rÃ´le
+::rose::rosÃ©
 ::sasy::says, sassy
 ::scholarstic::scholastic, scholarly
 ::secceeded::seceded, succeeded
@@ -5262,7 +5298,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::sould::could, should, sold
 ::speciallized::specialised, specialized
 ::specif::specific, specify
-::spects::aspects, expects
+    ::spects::aspects, expects
 ::strat::start, strata
 ::stroy::story, destroy
 ::surley::surly, surely
@@ -5279,7 +5315,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::travelling::traveling   ; commonwealth vs US
 ::troups::troupes, troops
 ::turnk::turnkey, trunk
-::uber::über
+::uber::Ã¼ber
 ::unmanouverable::unmaneuverable, unmanoeuvrable
 ::unsed::used, unused, unsaid
 ::vigeur::vigueur, vigour, vigor
@@ -5293,7 +5329,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::woulf::would, wolf
 ::ws::was, www.example.ws
 ::Yementite::Yemenite, Yemeni
-:?:oology::oölogy
+:?:oology::oÃ¶logy
 :?:t he:: the  ; Can't use this. Needs to be cleverer.
 */
 
@@ -5324,21 +5360,34 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;-------------------------------------------------------------------------------
 ; Added fractions by Jack Dunning -- Follow the basic fraction i.e. 1/4 with an asterisks * to replace with the single character symbol
 ;------------------------------------------------------------------------------
-:*:1/4*::¼
-:*:1/2*::½
-:*:3/4*::¾
+:*:1/4*::Â¼
+:*:1/2*::Â½
+:*:3/4*::Â¾
 ;-------------------------------------------------------------------------------
 ; Anything below this point was added to the script by the user via the Win+H hotkey.
 ;-------------------------------------------------------------------------------
-::(c)::©
-::(r)::®
-::(tm)::™
-::creme::crème
-:*:expose*::exposé
-:*:resume*::résumé
-; ::ne::né
+::(c)::Â©
+::(r)::Â®
+::(tm)::â„¢
+::creme::crÃ¨me
+:*:expose*::exposÃ©
+:*:resume*::rÃ©sumÃ©
+; ::ne::nÃ©
 ::athleticism::athletic ability
 ::i could care less::I couldn't care less
 ; ::on accident::on purpose
 ::enoug::enough
 ::worth while::worthwhile
+    
+;-------------------------------------------------------------------------------
+; Quickies
+;-------------------------------------------------------------------------------
+::@@::mothepro@live.com
+::@!::computewiz@hotmail.com
+::@#::theparkshade@gmail.com
+::##::5127408757
+::#!::6509334479
+
+; idea
+; super+@+h = housing email
+; super+#+h = housing phone number

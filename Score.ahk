@@ -22,29 +22,39 @@ FileSetAttrib, +H, %File%\stream_record
 WriteScores(WFile, 0)
 WriteScores(LFile, 0)
 
-^NumpadDiv:: ; Reset File
+^F2:: ; Reset File
 	WriteScores(WFile, 0)
 	WriteScores(LFile, 0)
 	Return
 
-NumpadAdd:: ; Increment Wins
+F2:: ; Swaps
+	temp := Read(WFile)
+	WriteScores(WFile, Read(LFile))
+	WriteScores(LFile, temp)
+
+	temp := Read(Files[1])
+	WriteScores(Files[1], Read(Files[2]))
+	WriteScores(Files[2], temp)
+	Return
+
+F3:: ; Increment Wins
 	WriteScores(WFile, Read(WFile) + 1)
-	Send, {+}
+	;Send, {+}
 	Return
 
-^NumpadAdd:: ; Decrement Wins
+^F3:: ; Decrement Wins
 	WriteScores(WFile, Read(WFile) - 1)
-	Send, {+}
+	;Send, {+}
 	Return
 
-NumpadSub:: ; Increment Loses
+F4:: ; Increment Loses
 	WriteScores(LFile, Read(LFile) + 1)
-	Send, -
+	;Send, -
 	Return
 
-^NumpadSub:: ; Decrement Loses
+^F4:: ; Decrement Loses
 	WriteScores(LFile, Read(LFile) - 1)
-	Send, -
+	;Send, -
 	Return
 
 ^#1:: Input(Files[1], 1)
