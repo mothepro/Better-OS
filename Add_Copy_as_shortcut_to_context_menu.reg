@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+; copy as shortcut
+[HKEY_CLASSES_ROOT\*\shell\tobin]
+"MUIVerb"="Send Shortcut to binary directory"
+
+[HKEY_CLASSES_ROOT\*\shell\tobin\command]
+@="node C:\Users\MOthe\Projects\Better-OS\mkSymLink.js %userprofile%\bin %1"
