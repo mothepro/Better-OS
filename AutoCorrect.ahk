@@ -4,45 +4,6 @@
 ;;;                                               ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; just some helpful things for me ;;;
-^!d:: ; Stay on Top = ctrl + alt + d
-    Winset, Alwaysontop, , A
-Return
-
-;#F8:: ; KeePass
-;    Run, "C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe"
-;    Return
-
-#F3:: ; Chrome
-    Run, Chrome
-Return
-
-;TODO copy on select (like on linux)
-
-#Insert:: ; Enable Headphones
-    Run, mmsys.cpl
-    WinWait, Sound
-    SendInput, {Down}{Down}{AppsKey}{Down}{Down}{Enter}{Enter}
-return
-
-#Delete:: ; Disable Headphones
-    Run, mmsys.cpl
-    WinWait, Sound
-    SendInput, {Down}{Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
-return
-
-#PgUp:: ; Enable Middle
-    Run, mmsys.cpl
-    WinWait, Sound
-    SendInput, {Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{AppsKey}{Down}{Down}{Enter}{Enter}
-return
-
-#PgDown:: ; Disable Middle
-    Run, mmsys.cpl
-    WinWait, Sound
-    SendInput, {Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{AppsKey}{Down}{Down}{Down}{Enter}{Enter}
-return
-
 ;;;;
 ;
 ; AutoHotkey Version: 1.x
@@ -61,7 +22,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;------------------------------------------------------------------------------
 ; CHANGELOG:
-; 
+;
 ; Sep 13 2007: Added more misspellings.
 ;              Added fix for -ign -> -ing that ignores words like "sign".
 ;              Added word beginnings/endings sections to cover more options.
@@ -69,30 +30,30 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; Feb 28 2007: Added other common misspellings based on MS Word AutoCorrect.
 ;              Added optional auto-correction of 2 consecutive capital letters.
 ; Sep 24 2006: Initial release by Jim Biancolo (http://www.biancolo.com)
-; 
+;
 ; INTRODUCTION
-; 
+;
 ; This is an AutoHotKey script that implements AutoCorrect against several
 ; "Lists of common misspellings":
-; 
+;
 ; This does not replace a proper spellchecker such as in Firefox, Word, etc.
 ; It is usually better to have uncertain typos highlighted by a spellchecker
 ; than to "correct" them incorrectly so that they are no longer even caught by
 ; a spellchecker: it is not the job of an autocorrector to correct *all*
 ; misspellings, but only those which are very obviously incorrect.
-; 
+;
 ; From a suggestion by Tara Gibb, you can add your own corrections to any
 ; highlighted word by hitting Win+H. These will be added to a separate file,
 ; so that you can safely update this file without overwriting your changes.
-; 
+;
 ; Some entries have more than one possible resolution (achive->achieve/archive)
 ; or are clearly a matter of deliberate personal writing style (wanna, colour)
-; 
+;
 ; These have been placed at the end of this file and commented out, so you can
 ; easily edit and add them back in as you like, tailored to your preferences.
-; 
+;
 ; SOURCES
-; 
+;
 ; http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings
 ; http://en.wikipedia.org/wiki/Wikipedia:Typo
 ; Microsoft Office autocorrect list
@@ -102,7 +63,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; User suggestions.
 ; http://www.autohotkey.com/download/AutoCorrect.ahk
 ; CONTENTS
-; 
+;
 ;   Settings
 ;   AUto-COrrect TWo COnsecutive CApitals (commented out by default)
 ;   Win+H code
@@ -119,7 +80,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;------------------------------------------------------------------------------
 #NoEnv ; For security
 #SingleInstance force
-    
+
 ;------------------------------------------------------------------------------
 ; AUto-COrrect TWo COnsecutive CApitals.
 ; Disabled by default to prevent unwanted corrections such as IfEqual->Ifequal.
@@ -168,7 +129,7 @@ Return
     SetTimer, MoveCaret, 10
     ; Show the InputBox, providing the default hotstring:
     InputBox, Hotstring, New Hotstring, Provide the corrected word on the right side. You can also edit the left side if you wish.`n`nExample entry:`n::teh::the,,,,,,,, ::%Hotstring%::%Hotstring%
-        
+
     if ErrorLevel <> 0  ; The user pressed Cancel.
         return
     ; Otherwise, add the hotstring and reload the script:
@@ -178,7 +139,7 @@ Return
     MsgBox, 4,, The hotstring just added appears to be improperly formatted.  Would you like to open the script for editing? Note that the bad hotstring is at the bottom of the script.
     IfMsgBox, Yes, Edit
         return
-    
+
 MoveCaret:
     IfWinNotActive, New Hotstring
         return
@@ -355,7 +316,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; Accented English words, from, amongst others,
 ; http://en.wikipedia.org/wiki/List_of_English_words_with_diacritics
 ; I have included all the ones compatible with reasonable codepages, and placed
-; those that may often not be accented either from a clash with an unaccented 
+; those that may often not be accented either from a clash with an unaccented
 ; word (resume), or because the unaccented version is now common (cafe).
 ;------------------------------------------------------------------------------
 ::aesop::Æsop
@@ -419,7 +380,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::creches::crèches
 ::coulee::coulée
 ::coulees::coulées
-::creme brulee::crème brûlée 
+::creme brulee::crème brûlée
 ::creme brulees::crème brûlées
 ::creme caramel::crème caramel
 ::creme caramels::crème caramels
@@ -647,7 +608,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::vins rose::vins rosé
 ::vis a vis::vis à vis
 ::vis-a-vis::vis-à-vis
-::voila::voilà 
+::voila::voilà
 
 ;------------------------------------------------------------------------------
 ; Common Misspellings - the main list
@@ -5342,7 +5303,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::thursday::Thursday
 ::friday::Friday
 ::saturday::Saturday
-::sunday::Sunday 
+::sunday::Sunday
 
 ::january::January
 ::february::February
@@ -5378,7 +5339,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; ::on accident::on purpose
 ::enoug::enough
 ::worth while::worthwhile
-    
+
 ;-------------------------------------------------------------------------------
 ; Quickies
 ;-------------------------------------------------------------------------------
@@ -5391,3 +5352,6 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; idea
 ; super+@+h = housing email
 ; super+#+h = housing phone number
+
+F7:: Send {PrintScreen} ; copy to Clipboard
+F8:: Send #{PrintScreen} ; save to screenshots dir
