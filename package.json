@@ -1,0 +1,10 @@
+{
+  "name": "Better-OS",
+  "version": "1.0.0",
+  "description": "Scripts to make Windows on my tower easier to use",
+  "repository": "https://github.com/mothepro/Better-OS.git",
+  "author": "Maurice Prosper <mothepro@live.com>",
+  "license": "MIT",
+  "type": "module",
+  "private": true
+}
