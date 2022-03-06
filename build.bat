@@ -8,5 +8,5 @@ for /r %%i in (*.ahk) do (
 	Ahk2Exe /in %%i /out %%~ni.exe
 
 	echo Running %%~ni.exe
-	rem start /b "%%~ni.exe"
+	start "" "%%~ni.exe"
 )
