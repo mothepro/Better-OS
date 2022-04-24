@@ -5355,3 +5355,5 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 
 F7:: Send {PrintScreen} ; copy to Clipboard
 F8:: Send #{PrintScreen} ; save to screenshots dir
+#F2:: Run calc.exe ; super + F2
+#+D:: Winset, Alwaysontop, , A ; super + shift + D
