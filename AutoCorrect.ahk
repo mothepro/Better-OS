@@ -5381,28 +5381,27 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;-------------------------------------------------------------------------------
 ; Hidden hotkeys
 ;-------------------------------------------------------------------------------
-private(key) {
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config[key]
-}
-
 ::@@::
-    private("@@")
+    IniRead, val, private.ini, section, @@
+    SendInput, % val
     return
 ::@!::
-    private("@!")
+    IniRead, val, private.ini, section, @!
+    SendInput, % val
     return
 ::@#::
-    private("@#")
+    IniRead, val, private.ini, section, @#
+    SendInput, % val
     return
 ::##::
-    private("##")
+    IniRead, val, private.ini, section, ##
+    SendInput, % val
     return
 ::#!::
-    private("#!")
+    IniRead, val, private.ini, section, #!
+    SendInput, % val
     return
 ::#@h::
-    private("#!")
+    IniRead, val, private.ini, section, #@h
+    SendInput, % val
     return
