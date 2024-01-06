@@ -5382,26 +5382,26 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; Hidden hotkeys
 ;-------------------------------------------------------------------------------
 ::@@::
-    IniRead, val, private.ini, section, @@
+    IniRead, val, hidden.ini, section, @@
     SendInput, % val
     return
 ::@!::
-    IniRead, val, private.ini, section, @!
+    IniRead, val, hidden.ini, section, @!
     SendInput, % val
     return
 ::@#::
-    IniRead, val, private.ini, section, @#
+    IniRead, val, hidden.ini, section, @#
     SendInput, % val
     return
 ::##::
-    IniRead, val, private.ini, section, ##
+    IniRead, val, hidden.ini, section, ##
     SendInput, % val
     return
 ::#!::
-    IniRead, val, private.ini, section, #!
+    IniRead, val, hidden.ini, section, #!
     SendInput, % val
     return
 ::#@h::
-    IniRead, val, private.ini, section, #@h
+    IniRead, val, hidden.ini, section, #@h
     SendInput, % val
     return
