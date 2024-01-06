@@ -12,6 +12,24 @@ F8:: Send #{PrintScreen} ; save to screenshots dir
 F9:: Send #!{PrintScreen} ; save current app to screenshots dir
 #F2:: Run calc.exe ; super + F2
 #+D:: Winset, Alwaysontop, , A ; super + shift + D
+; ^PgDn::
+;     SoundSet, +1, MASTER, mute
+;     SoundGet, master_mute, , mute
+
+;     ToolTip, Mute %master_mute% ;use a tool tip at mouse pointer to show what state mic is after toggle
+;     SetTimer, RemoveToolTip, 1000
+;     return
+
+; RemoveToolTip:
+;     SetTimer, RemoveToolTip, Off
+;     ToolTip
+;     return
+; When you press windows plus up arrow it will show a message box with the current mouse coordinates
+; #Up::
+;     MouseGetPos, xpos, ypos
+;     MsgBox, The cursor is at X%xpos% Y%ypos%.
+
+
 ; When you press Windows+caps lock It will send Windows+C then Windows+H
 ; The will open up copilot and enable voice control (Windows Preview Feature)
 #capslock::
@@ -180,7 +198,7 @@ return
 #Hotstring B0  ; Turns off automatic backspacing for the following hotstrings.
 ::align::
 ::antiforeign::
-    ::arraign::
+::arraign::
 ::assign::
 ::benign::
 ::campaign::
@@ -200,7 +218,7 @@ return
 ::ensign::
 ::feign::
 ::foreign::
-    ::indign::
+::indign::
 ::malign::
 ::misalign::
 ::outdesign::
@@ -5363,33 +5381,28 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;-------------------------------------------------------------------------------
 ; Hidden hotkeys
 ;-------------------------------------------------------------------------------
+private(key) {
+    filePath := "private.json"
+    FileRead, jsonContent, %filePath%
+    config := JSON.Load(jsonContent)
+    SendInput, % config[key]
+}
+
 ::@@::
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config["@@"]
+    private("@@")
+    return
 ::@!::
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config["@!"]
+    private("@!")
+    return
 ::@#::
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config["@#"]
+    private("@#")
+    return
 ::##::
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config["##"]
+    private("##")
+    return
 ::#!::
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config["#!"]
+    private("#!")
+    return
 ::#@h::
-    filePath := "private.json"
-    FileRead, jsonContent, %filePath%
-    config := JSON.Load(jsonContent)
-    SendInput, % config["#!"]
+    private("#!")
+    return
