@@ -6,6 +6,24 @@
 ;;;                                               ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+F7:: Send {PrintScreen} ; copy to Clipboard
+F8:: Send #{PrintScreen} ; save to screenshots dir
+F9:: Send #!{PrintScreen} ; save current app to screenshots dir
+#F2:: Run calc.exe ; super + F2
+#+D:: Winset, Alwaysontop, , A ; super + shift + D
+; When you press Windows+caps lock It will send Windows+C then Windows+H
+; The will open up copilot and enable voice control (Windows Preview Feature)
+#capslock::
+    Send #c
+    Sleep 2000
+    MouseMove 2524, 670
+    ; show a dialog with the current mouse position
+    MouseGetPos, xpos, ypos
+    MsgBox, The cursor is at X%xpos% Y%ypos%.
+    Click
+    Return
+
 ;;;;
 ;
 ; AutoHotkey Version: 1.x
