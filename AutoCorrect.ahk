@@ -5334,7 +5334,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::(tm)::™
 ::creme::crème
 :*:expose*::exposé
-:*:resume*::résumé
+; :*:resume*::résumé
 ; ::ne::né
 ::athleticism::athletic ability
 ::i could care less::I couldn't care less
