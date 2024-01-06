@@ -1,6 +1,6 @@
 @ECHO OFF
 
-for /r %%i in (*.ahk) do (
+for %%i in (*.ahk) do (
 	echo Closing %%~ni.exe
 	taskkill /IM %%~ni.exe
 

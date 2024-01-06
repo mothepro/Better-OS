@@ -1,3 +1,5 @@
+#Include lib/JSON.ahk ; Include the Json library for parsing JSON
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                               ;;;
 ;;;  CHANGES OCCUR WHEN TYPING PASSWORDS AS WELL  ;;;
