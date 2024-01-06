@@ -5343,13 +5343,34 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::worth while::worthwhile
 
 ;-------------------------------------------------------------------------------
-; Quickies
+; Hidden hotkeys
 ;-------------------------------------------------------------------------------
-::@@::mothepro@live.com
-::@!::computewiz@hotmail.com
-::@#::theparkshade@gmail.com
-::##::5127408757
-::#!::6509334479
+::@@::
+    filePath := "private.json"
+    FileRead, jsonContent, %filePath%
+    config := JSON.Load(jsonContent)
+    SendInput, % config["@@"]
+::@!::
+    filePath := "private.json"
+    FileRead, jsonContent, %filePath%
+    config := JSON.Load(jsonContent)
+    SendInput, % config["@!"]
+::@#::
+    filePath := "private.json"
+    FileRead, jsonContent, %filePath%
+    config := JSON.Load(jsonContent)
+    SendInput, % config["@#"]
+::##::
+    filePath := "private.json"
+    FileRead, jsonContent, %filePath%
+    config := JSON.Load(jsonContent)
+    SendInput, % config["##"]
+::#!::
+    filePath := "private.json"
+    FileRead, jsonContent, %filePath%
+    config := JSON.Load(jsonContent)
+    SendInput, % config["#!"]
+
 
 ; idea
 ; super+@+h = housing email
